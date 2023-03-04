@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Calculadora de preço de venda</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    text-align: center;
+    background-color: #f9f9f9;
+    padding: 10px;
+  }
+
+  header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+  }
+
+  h1 {
+    font-family: "Helvetica Neue", sans-serif;
+    font-size: 32px;
+    font-weight: bold;
+    color: #ff69b4;
+    margin: 20px 0;
+  }
+
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  }
+
+  form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 0;
+  }
+
+  form label {
+    display: block;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  form input[type=number] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+
+  form input[type=button] {
+    background-color: #4CAF50;
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 10px auto;
+    transition: background-color 0.3s ease;
+  }
+
+  form input[type=button]:hover {
+    background-color: #3e8e41;
+  }
+
+  form input[type=button]:active {
+    background-color: #ff69b4;
+  }
+
+  p {
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 20px 0;
+  }
+
+  .result-box {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  }
+
+  .result-box h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ff69b4;
+    margin-bottom: 10px;
+  }
+
+  .result-box p {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .result-box .green {
+    color: #4CAF50;
+  }
+
+  .result-box .red {
+    color: #f44336;
+  }
+
+  /* Media queries */
+  @media screen and (max-width: 600px) {
+    main{
+padding: 10px;
+}
+form input[type=number] {
+  width: calc(50% - 5px);
+  margin-right: 10px;
+}
+
+form input[type=button] {
+  width: 100%;
+  margin: 10px 0;
+}
+}
+</style>
+
+  </head>
+  <body>
+    <h1>Calculadora de preço de venda</h1>
+    <form>
+      <label for="frete">Frete:</label>
+      <input type="number" id="frete" name="frete"><br><br>  
+<label for="quant_min">Quantidade Mínima:</label>
+  <input type="number" id="quant_min" name="quant_min"><br><br>
+  
+  <label for="custo_alto">Custo Mais Alto:</label>
+  <input type="number" id="custo_alto" name="custo_alto"><br><br>
+  
+  <label for="custo_baixo">Custo Mais Baixo:</label>
+  <input type="number" id="custo_baixo" name="custo_baixo"><br><br>
+  
+  <label for="custo_medio">Custo Médio:</label>
+  <input type="number" id="custo_medio" name="custo_medio"><br><br>
+  
+  <label for="margem">Lucro Desejado:</label>
+  <input type="number" id="margem" name="margem"><br><br>
+  
+  <input type="button" value="Calcular" onclick="calcular()">
+</form>
+
+<p>Preço de venda em relação ao custo médio: <span id="preco_medio"></span></p>
+<p>Líquido máximo em relação ao custo médio: <span id="liquido_max_medio"></span></p>
+<p>Líquido mínimo em relação ao custo médio: <span id="liquido_min_medio"></span></p>
+<hr>
+<p>Preço de venda em relação ao custo mais alto: <span id="preco_alto"></span></p>
+<p>Líquido máximo em relação ao custo mais alto: <span id="liquido_max_alto"></span></p>
+<p>Líquido mínimo em relação ao custo mais alto: <span id="liquido_min_alto"></span></p>
+
+<script>
+  function calcular() {
+    // Obter os valores dos campos
+    const frete = parseFloat(document.getElementById('frete').value);
+    const quant_min = parseInt(document.getElementById('quant_min').value);
+    const custo_alto = parseFloat(document.getElementById('custo_alto').value);
+    const custo_baixo = parseFloat(document.getElementById('custo_baixo').value);
+    const custo_medio = parseFloat(document.getElementById('custo_medio').value);
+    const margem = parseFloat(document.getElementById('margem').value);
+    
+    // Calcular os resultados
+    const preco_medio = (custo_medio + (frete/quant_min)) + margem;
+    const liquido_max_medio = ((custo_medio + (frete/quant_min)) - (custo_baixo + (frete/quant_min)) + margem) * quant_min;
+    const liquido_min_medio = ((custo_medio + (frete/quant_min)) - (custo_alto + (frete/quant_min)) + margem) * quant_min;
+    const preco_alto = (custo_alto + (frete/quant_min)) + margem;
+    const liquido_max_alto = ((custo_alto + (frete/quant_min)) - (custo_baixo + (frete/quant_min)) + margem) * quant_min;
+const liquido_min_alto = ((custo_alto + (frete/quant_min)) - (custo_alto + (frete/quant_min)) + margem) * quant_min;
+// Exibir os resultados
+document.getElementById('preco_medio').innerHTML = preco_medio.toFixed(2);
+document.getElementById('liquido_max_medio').innerHTML = liquido_max_medio.toFixed(2);
+document.getElementById('liquido_min_medio').innerHTML = liquido_min_medio.toFixed(2);
+document.getElementById('preco_alto').innerHTML = preco_alto.toFixed(2);
+document.getElementById('liquido_max_alto').innerHTML = liquido_max_alto.toFixed(2);
+document.getElementById('liquido_min_alto').innerHTML = liquido_min_alto.toFixed(2);
+}
+</script>
+
+  </body>
+</html> 
